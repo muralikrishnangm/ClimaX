@@ -49,6 +49,7 @@ First, download ERA5 data from [WeatherBench](https://dataserv.ub.tum.de/index.p
    |-- u_component_of_wind
    |-- v_component_of_wind
 ```
+* **NOTE:** Make sure to add `constants.nc` in the directory, not in sub-directories.
 
 Then, preprocess the netcdf data into small numpy files and compute important statistics
 ```bash
@@ -83,13 +84,23 @@ python src/climax/global_forecast/train.py --config configs/global_forecast_clim
     --trainer.strategy=ddp --trainer.devices=8 \
     --trainer.max_epochs=50 \
     --data.root_dir=/mnt/data/5.625deg_npz \
-    --data.predict_range=72 --data.out_variables=['z_500','t_850','t2m'] \
+    --data.predict_range=72 --data.out_variables=['geopotential_500','temperature_850','2m_temperature'] \
     --data.batch_size=16 \
     --model.pretrained_path='https://huggingface.co/tungnd/climax/resolve/main/5.625deg.ckpt' \
     --model.lr=5e-7 --model.beta_1="0.9" --model.beta_2="0.99" \
     --model.weight_decay=1e-5
 ```
 To train ClimaX from scratch, set `--model.pretrained_path=""`.
+**NOTES for running on OLCF Frontier (not complete yet):**
+* Add the following to the environment:
+    ```
+    unset SLURM_EXPORT_ENV
+    cd $SLURM_SUBMIT_DIR
+    export MIOPEN_USER_DB_PATH="/tmp/my-miopen-cache"
+    export MIOPEN_CUSTOM_CACHE_DIR=${MIOPEN_USER_DB_PATH}
+    rm -rf ${MIOPEN_USER_DB_PATH}
+    mkdir -p ${MIOPEN_USER_DB_PATH}
+    ```
 
 ## Regional Forecasting
 
