@@ -18,6 +18,21 @@ git clone https://github.com/microsoft/ClimaX
     pip install -e .
     ```
 
+    ```bash title="OLCF Frontier"
+    # after the above steps, reinstall pytorch for ROCm
+    pip uninstall torch
+    pip uninstall torch
+    # running it a couple of times until "WARNING: Skipping torch as it is not installed." is seen.
+    pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.4.2
+    # need to reinstall torchdata
+    pip uninstall torchdata
+    pip install torchdata
+    ```
+    * Getting the following warning - not sure
+    ```
+    ClimaX/ClimaX_frontier/lib/python3.8/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: libc10_cuda.so: cannot open shared object file: No such file or directory
+    warn(f"Failed to load image Python extension: {e}")
+    ```
 
 
 === "`docker`"
