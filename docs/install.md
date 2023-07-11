@@ -19,6 +19,9 @@ git clone https://github.com/microsoft/ClimaX
     ```
 
     ```bash title="OLCF Frontier"
+    # first activate your base miniconda env
+    source $PROJWORK/stf006/muraligm/software/miniconda3-frontier/bin/activate
+    # follow the above steps to create and activate the custom env, and the install the package
     # after the above steps, reinstall pytorch for ROCm
     pip uninstall torch
     pip uninstall torch
@@ -27,7 +30,7 @@ git clone https://github.com/microsoft/ClimaX
     pip uninstall torchaudio
     pip uninstall torchdata
     pip3 install torch torchvision torchaudio torchdata --index-url https://download.pytorch.org/whl/rocm5.4.2
-    # install rish for RichModelSummary
+    # install rich for RichModelSummary
     pip install -U rich
     ```
 
