@@ -91,8 +91,9 @@ python src/climax/global_forecast/train.py --config configs/global_forecast_clim
     --model.weight_decay=1e-5
 ```
 To train ClimaX from scratch, set `--model.pretrained_path=""`.
+
 **NOTES for running on OLCF Frontier (not complete yet):**
-* Add the following to the environment:
+* Add the following to the environment and then load custom env:
     ```
     unset SLURM_EXPORT_ENV
     cd $SLURM_SUBMIT_DIR
@@ -100,6 +101,12 @@ To train ClimaX from scratch, set `--model.pretrained_path=""`.
     export MIOPEN_CUSTOM_CACHE_DIR=${MIOPEN_USER_DB_PATH}
     rm -rf ${MIOPEN_USER_DB_PATH}
     mkdir -p ${MIOPEN_USER_DB_PATH}
+
+    source $PROJWORK/stf006/muraligm/software/miniconda3-frontier/bin/activate
+    conda activate climaX
+
+    # run the script as above
+    python src/climax/global_forecast/train.py ...
     ```
 
 ## Regional Forecasting
