@@ -7,31 +7,36 @@ git clone https://github.com/microsoft/ClimaX
 
 === "`conda`"
 
-    ```bash title="create and activate env"
+    ```bash title="Step 1: create and activate env"
     cd ClimaX
     conda env create --file docker/environment.yml
     conda activate climaX
     ```
 
-    ```bash title="install this package"
+    ```bash title="Step 1: OLCF Frontier"
+    # first activate your base miniconda env
+    source $PROJWORK/stf006/muraligm/software/miniconda3-frontier/bin/activate
+    # follow rest of the steps but use the environment file for Frontier
+    cd ClimaX
+    conda env create --file docker/environment_frontier.yml
+    conda activate climaX
+    ```
+
+    ```bash title="Step 2: install this package"
     # install so the project is in PYTHONPATH
     pip install -e .
     ```
 
-    ```bash title="OLCF Frontier"
-    # first activate your base miniconda env
+    ```bash title="Note: editing the environment file for OLCF Frontier"
+    # The idea is to install rocm version of torch and others on a temp env and create a temp environment file for that env.
+    # Then, copy the versions from this temp environment file to the ClimaX environment file
     source $PROJWORK/stf006/muraligm/software/miniconda3-frontier/bin/activate
-    # follow the above steps to create and activate the custom env, and the install the package
-    # after the above steps, reinstall pytorch for ROCm
-    pip uninstall torch
-    pip uninstall torch
-    # running it a couple of times until "WARNING: Skipping torch as it is not installed." is seen.
-    pip uninstall torchvision
-    pip uninstall torchaudio
-    pip uninstall torchdata
+    conda create --prefix=env-temp python=3.8
+    conda activate $PROJWORK/stf006/proj-shared/muraligm/ML/ClimaX/env-temp
     pip3 install torch torchvision torchaudio torchdata --index-url https://download.pytorch.org/whl/rocm5.4.2
-    # install rich for RichModelSummary
     pip install -U rich
+    conda env export | grep -v "^prefix: " > environment_temp.yml
+    # edit the `docker/environment.yml` file with the new rocm versions giving `docker/environment_frontier.yml`
     ```
 
 === "`docker`"
